@@ -1,4 +1,4 @@
-# NachOs_4.1 编译过程
+# NachOS_4.1 编译过程
 ## 编译环境
 - VMware® Workstation 15 Pro
 - Ubuntu 18.04.1 LTS 64位
