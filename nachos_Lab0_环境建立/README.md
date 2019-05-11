@@ -11,10 +11,10 @@
 我的库文件提前装好了，因此这里不再赘述。
 ## 编译目标
 
-    ./NachOS-4.1/code/build.linux/Makefile
+    ../NachOS-4.1/code/build.linux/Makefile
 
 ## debug过程
-- 进入```/NachOS-4.1/code/build.linux```目录，依次执行```make clean```和```make distclean```命令
+- 进入```NachOS-4.1/code/build.linux```目录，依次执行```make clean```和```make distclean```命令
 
     这两句打扫编译环境，清理之前编译（如果编译过的话）产生的中间文件，每次编译前都最好执行者两个命令。两个命令输出如下：
 
