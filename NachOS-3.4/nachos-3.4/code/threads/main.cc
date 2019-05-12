@@ -1,10 +1,10 @@
 // main.cc 
 //	Bootstrap code to initialize the operating system kernel.
 //
-//	Allows direct calls into internal operating system functions,
-//	to simplify debugging and testing.  In practice, the
-//	bootstrap code would just initialize data structures,
-//	and start a user program to print the login prompt.
+// Allows direct calls into internal operating system functions,
+// to simplify debugging and testing.  In practice, the
+// bootstrap code would just initialize data structures,
+// and start a user program to print the login prompt.
 //
 // 	Most of this file is not needed until later assignments.
 //
@@ -105,7 +105,7 @@ main(int argc, char **argv)
 #endif
 
     for (argc--, argv++; argc > 0; argc -= argCount, argv += argCount) {
-	argCount = 1;
+		argCount = 1;
         if (!strcmp(*argv, "-z"))               // print copyright
             printf (copyright);
 #ifdef USER_PROGRAM
@@ -127,25 +127,25 @@ main(int argc, char **argv)
 	}
 #endif // USER_PROGRAM
 #ifdef FILESYS
-	if (!strcmp(*argv, "-cp")) { 		// copy from UNIX to Nachos
-	    ASSERT(argc > 2);
-	    Copy(*(argv + 1), *(argv + 2));
-	    argCount = 3;
-	} else if (!strcmp(*argv, "-p")) {	// print a Nachos file
-	    ASSERT(argc > 1);
-	    Print(*(argv + 1));
-	    argCount = 2;
-	} else if (!strcmp(*argv, "-r")) {	// remove Nachos file
-	    ASSERT(argc > 1);
-	    fileSystem->Remove(*(argv + 1));
-	    argCount = 2;
-	} else if (!strcmp(*argv, "-l")) {	// list Nachos directory
-            fileSystem->List();
-	} else if (!strcmp(*argv, "-D")) {	// print entire filesystem
-            fileSystem->Print();
-	} else if (!strcmp(*argv, "-t")) {	// performance test
-            PerformanceTest();
-	}
+		if (!strcmp(*argv, "-cp")) { 		// copy from UNIX to Nachos
+			ASSERT(argc > 2);
+			Copy(*(argv + 1), *(argv + 2));
+			argCount = 3;
+		} else if (!strcmp(*argv, "-p")) {	// print a Nachos file
+			ASSERT(argc > 1);
+			Print(*(argv + 1));
+			argCount = 2;
+		} else if (!strcmp(*argv, "-r")) {	// remove Nachos file
+			ASSERT(argc > 1);
+			fileSystem->Remove(*(argv + 1));
+			argCount = 2;
+		} else if (!strcmp(*argv, "-l")) {	// list Nachos directory
+				fileSystem->List();
+		} else if (!strcmp(*argv, "-D")) {	// print entire filesystem
+				fileSystem->Print();
+		} else if (!strcmp(*argv, "-t")) {	// performance test
+				PerformanceTest();
+		}
 #endif // FILESYS
 #ifdef NETWORK
         if (!strcmp(*argv, "-o")) {
