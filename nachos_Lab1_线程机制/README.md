@@ -192,3 +192,7 @@ class Thread {
 #endif
 }
 ```
+
+### NachOS-3.4/code/threads/thread.cc
+
+&emsp;&emsp;Thread.cc中主要是管理Thread的一些事务。主要包括了四个主要的方法。Fork()、Finish()、Yield()、Sleep()。在Thread.h中对它们进行了声明，在Thread.cc中则负责具体的实现。注意到，这里实现的方法大多是都是原子操作，在方法的一开始保存中断层次关闭中断，并在最后恢复原状态。
