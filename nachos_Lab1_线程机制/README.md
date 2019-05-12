@@ -156,7 +156,7 @@ class Thread {
 
     void Fork(VoidFunctionPtr func, void *arg); 	// 派生一个线程，放在就绪队列末尾，当它占用CPU时，调用参数列表传入的方法func（以 *arg作为参数）
     void Yield();  				// 当有其他线程准备就绪时，放弃CPU
-    void Sleep();  				// 放弃CPU并设置进程状态为sleep
+    void Sleep();  				// 放弃CPU并设置进程状态为BLOCKED
     void Finish();  				// The thread is done executing
     void CheckOverflow();   			// Check if thread has overflowed its stack
     void setStatus(ThreadStatus st) { status = st; }    //  设置进程状态为枚举类型ThreadStatus { JUST_CREATED, RUNNING, READY, BLOCKED }之一
@@ -196,3 +196,41 @@ class Thread {
 ### NachOS-3.4/code/threads/thread.cc
 
 &emsp;&emsp;Thread.cc中主要是管理Thread的一些事务。主要包括了四个主要的方法。Fork()、Finish()、Yield()、Sleep()。在Thread.h中对它们进行了声明，在Thread.cc中则负责具体的实现。注意到，这里实现的方法大多是都是原子操作，在方法的一开始保存中断层次关闭中断，并在最后恢复原状态。
+
+- Thread()：构造函数，初始化一个新的Thread。
+
+- Fork(VoidFunctionPtr func,int arg):
+    
+    - func，新线程运行的函数；
+    - arg，func函数的参数。它的实现包括一下几步：
+        - 分配一个堆栈
+        - 初始化堆栈
+        - 将线程放入就绪队列
+
+- Finish()：并不是直接收回线程的数据结构和堆栈，因为我们仍在这个堆栈上运行这个线程。做法是将threadToBeDestroyed的值设为当前线程，使得Scheduler的Run()可以调用销毁程序，当我们这个程序退出上下文时，将其销毁。
+
+- Yield()：调用scheduler找到就绪队列中的下一个线程，并让其执行。以达到放弃CPU的效果。
+
+ ## Exercise3
+**增加“用户ID、线程ID”两个数据成员，并在Nachos现有的线程管理机制中增加对这两个数据成员的维护机制。**
+
+- 增加用户ID：
+
+    **设计思路：**
+    现有的Nachos代码不支持多用户，我获取当前Linux系统的用户ID作为Nachos的用户ID。
+
+     对代码进行的修改：
+     ```C++
+
+     ```
+
+    在thread.h文件的thread类声明中添加私有的int型成员变量userID、添加公有的成员方法getUserID()用于获取当前的userID。
+
+     在thread.cc文件的开始位置，引入头文件“unistd.h”。它是C和C++中提供的对POSIX操作系统的访问功能的头文件，这样，我们就可以在Nachos中直接获取当前Linux的用户ID了。此后在Thread的构造函数中添加语句userID=getuid()，即可获取当前Linux系统的用户ID。在thread.cc文件中还实现了getUserID()方法，这个方法很简单，return一个userID即可。
+
+     运行结果：
+
+    ![](https://raw.githubusercontent.com/unclejimao/pictureBed/master/lab1_exercise3.png)
+    ![](https://raw.githubusercontent.com/unclejimao/pictureBed/master/lab1_exercise3_1.png)
+
+    
