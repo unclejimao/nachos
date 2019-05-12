@@ -211,7 +211,7 @@ class Thread {
 
 - Yield()：调用scheduler找到就绪队列中的下一个线程，并让其执行。以达到放弃CPU的效果。
 
- ## Exercise3
+## Exercise3
 **增加“用户ID、线程ID”两个数据成员，并在Nachos现有的线程管理机制中增加对这两个数据成员的维护机制。**
 
 - 增加用户ID：
@@ -233,4 +233,4 @@ class Thread {
     ![](https://raw.githubusercontent.com/unclejimao/pictureBed/master/lab1_exercise3.png)
     ![](https://raw.githubusercontent.com/unclejimao/pictureBed/master/lab1_exercise3_1.png)
 
-    
+## Exercise4
