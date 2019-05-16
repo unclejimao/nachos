@@ -23,7 +23,7 @@
 
 --------------------------------------
 # 完成情况
-## Exercise1
+## Exercise 1  调研
 
 &emsp;&emsp;在Linux中的每一个进程由一个task_struct数据结构来描述。task_struct就是通常所说的进程控制块（PCB）。task_struct容纳了一个进程的所有信息，是对系统进程进行控制的唯一手段，也是最有效的手段。task_struct存放在/include/linux/sched.h中。
 
@@ -48,7 +48,7 @@ Linux系统的PCB包括了很多参数，主要的参数有：
 |11|处理器上下文信息|当进程暂时停止运行时，处理机的状态必须保存在进程的task_struct。当进程被调度重新运行时再从中恢复这些环境，也就是恢复这些寄存器和堆栈的值。|
 |12|其他|记录一些其他的必要信息。|
 
-## Exercise2
+## Exercise2  源代码阅读
 
 ### NachOS-3.4/code/threads/main.cc
 &emsp;&emsp;main.cc是整个操作系统kernel启动的入口，通过它可以直接调用操作系统的方法。通过程序中的main函数，配以不同的参数，可以调用Nachos操作系统不同部分的各个方法。
@@ -211,26 +211,94 @@ class Thread {
 
 - Yield()：调用scheduler找到就绪队列中的下一个线程，并让其执行。以达到放弃CPU的效果。
 
-## Exercise3
+## Exercise 3  扩展线程的数据结构
 **增加“用户ID、线程ID”两个数据成员，并在Nachos现有的线程管理机制中增加对这两个数据成员的维护机制。**
 
 - 增加用户ID：
 
     **设计思路：**
-    现有的Nachos代码不支持多用户，我获取当前Linux系统的用户ID作为Nachos的用户ID。
+    现有的Nachos代码不支持多用户，我们获取当前Linux系统的用户ID作为Nachos的用户ID。
 
-     对代码进行的修改：
-     ```C++
-
-     ```
+    **代码修改：**
 
     在thread.h文件的thread类声明中添加私有的int型成员变量userID、添加公有的成员方法getUserID()用于获取当前的userID。
 
-     在thread.cc文件的开始位置，引入头文件“unistd.h”。它是C和C++中提供的对POSIX操作系统的访问功能的头文件，这样，我们就可以在Nachos中直接获取当前Linux的用户ID了。此后在Thread的构造函数中添加语句userID=getuid()，即可获取当前Linux系统的用户ID。在thread.cc文件中还实现了getUserID()方法，这个方法很简单，return一个userID即可。
+    代码修改见  [thread.h](./thread.h)
 
-     运行结果：
+    在thread.cc文件的开始位置，引入头文件“unistd.h”。它是C和C++中提供的对POSIX操作系统的访问功能的头文件，这样，我们就可以在Nachos中直接获取当前Linux的用户ID了。此后在Thread的构造函数中添加语句userID=getuid()，即可获取当前Linux系统的用户ID。在thread.h文件中还实现了getUserID()方法，这个方法很简单，return一个userID即可。
+
+    代码修改见 [thread.cc](./thread.cc)
+- 增加线程ID：
+
+    **设计思路：**
+
+    声明一个全局的数组，定义这个数据有128个元素。每个元素的取值为0或1。0表示该数组下标没有作为线程的ID分配出去，1表示以分配。每次创建一个新线程的时候从1开始遍历此数组，得到的第一个值为0元素的数组下标作为线程的ID分配给将要创建的线程。如果遍历一遍数组发现没有可用的ID了，则不创建该线程，并输出提示。另外，由于系统的全局变量都声明和定义在system.h或system.cc中，我们也将该数组定义在这里。
+
+    **代码修改：**
+
+    在thread.h文件的thread类声明中添加int型的私有成员变量threadID、添加公有的成员方法getThreadID()用于获取当前的threadID。
+    
+    代码修改见  [thread.h](./thread.h)
+
+    在system.cc中，声明可以创建线程数的最大值MaxThread为128、并声明一个threadIDs[]数组用于记录分配和未分配的线程ID数值。
+
+    在system.cc的Initialize()中，定义threadIDs[MaxThread]数组，并将其值都初始化为0。
+
+    代码修改见 [system.cc](./system.cc)
+
+    在thread.cc文件中，定义allocatedThreadID()方法。该方法每次从1开始遍历threadIDs数组，发现的第一个值为零的元素下标作为线程的ID。如果没有可分配的ID，则返回-1。同时，在thread构造函数的一开始，用flag接收一个allocatedThreadID()返回的线程ID。如果为-1，则输出提示，停止创建过程。否则继续创建该线程。并在析构函数中将完成的线程ID的对应的数组值重新赋为0。 
+
+    代码修改见 [thread.cc](./thread.cc)
+
+    随后修改测试用例，验证输出
+
+    测试用例修改见 [threadtest.cc](./threadtest.cc)
+
+    重新```make```后，命令行输入```./nachos -q 2```,运行结果：
 
     ![](https://raw.githubusercontent.com/unclejimao/pictureBed/master/lab1_exercise3.png)
     ![](https://raw.githubusercontent.com/unclejimao/pictureBed/master/lab1_exercise3_1.png)
 
-## Exercise4
+## Exercise 4  增加全局线程管理机制
+
+- 增加线程数量
+
+    **设计思路：**
+
+    根据上一个实验，为每个线程分配了一个ID。最大值仍设为128。如果线程数超过128则返回ID为-1。因此在创建新线程时进行一次判断，如果返回的ID为-1，则停止创建即可。
+
+    **代码修改：**
+
+    在Exercise3的基础上，修改thread.cc文件。关键在```ASSERT(flag!=-1)```
+
+    代码修改见 [thread.cc](./thread.cc)
+
+    在threadtest.cc中创建ThreadTest3()，循环创建128个线程，查看输出
+
+    测试用例修改见 [threadtest.cc](./threadtest.cc)
+
+- 增加TS命令参数
+
+    **设计思路：**
+
+    当前的Nachos操作系统中只有READY队列，所以要输出系统中所有的线程，只需要输出READY队列，即可，需要注意的是，总是有一个线程处于正在执行的状态。所以输出中要把这个线程也加上。
+
+    通过阅读代码和查资料了解到，readyList是定义在scheduler.cc中的，但是它是一个私有类型的变量，所以要添加一个公有的get方法获得它。
+
+    同时了解到list.cc中有一个Mapcar(func)的方法。可以对List中的每个元素调用func方法。
+
+    **代码修改：**
+
+    在main.cc中，添加相应方法，使得系统能识别TS命令，在其中将testnum设为3。
+
+    代码修改见 [main.cc](./main.cc)
+
+    在thread.cc中添加MyThreadPrint()的定义，首先将item强制类型转换为Thread类型。之后打印其相关内容。
+
+    代码修改见 [thread.cc](./thread.cc)
+
+    在threadtest.cc中创建ReadyListPrint()函数和ThreadTest4()函数，ReadyListPrint()的主要作用是打印出该线程正在执行时的状态，包括打印出当前线程和readyList中的线程。这里用到了关中断，以防过程中被其他线程中断。
+
+    ThreadTest4()中创建了3个线程，每个线程都执行ReadyListPrint()方法。
+
+    测试用例修改见 [threadtest.cc](./threadtest.cc)
