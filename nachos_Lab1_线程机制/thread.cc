@@ -19,6 +19,12 @@
 #include "switch.h"
 #include "synch.h"
 #include "system.h"
+//******************************************************************************************************************************************//
+// *Begin* These lines are added for Lab1 Exerise3 
+#include "unistd.h"
+// *End* These lines are added for Lab1 Exerise3 
+//******************************************************************************************************************************************//
+
 
 #define STACK_FENCEPOST 0xdeadbeef // this is put at the top of the
                                    // execution stack, for detecting
@@ -34,10 +40,35 @@
 
 Thread::Thread(char *threadName)
 {
+    //******************************************************************************************************************************************//
+    // *Begin* These lines are added for Lab1 Exerise4
+
+    int flag = allocatedThreadID();
+    if (flag == -1)
+    {
+        printf("The number of threads has reached the upper limit and no more threads can be allocated.\n");
+    }
+    ASSERT(flag != -1);
+
+    // *End* These lines are added for Lab1 Exerise4
+    //******************************************************************************************************************************************//
+    
     name = threadName;
     stackTop = NULL;
     stack = NULL;
     status = JUST_CREATED;
+
+    //******************************************************************************************************************************************//
+    // *Begin* These lines are added for Lab1 Exerise3 
+
+    this->userID=this->getUserID();
+    printf("UserID = %d\n",this->userID);
+    this->threadID=allocatedThreadID();
+    printf("ThreadID = %d\n",this->threadID);
+
+    // *End* These lines are added for Lab1 Exerise3 
+    //******************************************************************************************************************************************//
+
 #ifdef USER_PROGRAM
     space = NULL;
 #endif
@@ -60,6 +91,15 @@ Thread::~Thread()
     DEBUG('t', "Deleting thread \"%s\"\n", name);
 
     ASSERT(this != currentThread);
+    //******************************************************************************************************************************************//
+    // *Begin* These lines are added for Lab1 Exerise3 
+
+    threadIDs[this->threadID]=0;
+    printf("Thread-%d has been removed, ID-%d is available now...\n",this->threadID,this->threadID);
+
+    // *End* These lines are added for Lab1 Exerise3 
+    //******************************************************************************************************************************************//
+
     if (stack != NULL)
         DeallocBoundedArray((char *)stack, StackSize * sizeof(int));
 }
@@ -315,3 +355,41 @@ void Thread::RestoreUserState()
         machine->WriteRegister(i, userRegisters[i]);
 }
 #endif
+//******************************************************************************************************************************************//
+// *Begin* These lines are added for Lab1 Exerise3 
+
+
+int allocatedThreadID(){
+    int i;
+    for (i = 0; i < MaxThread; i++)
+    {
+        if (threadIDs[i]==0)
+        {
+                break;
+        } 
+    }
+    if (i<MaxThread)
+    {
+        threadIDs[i]=1;
+        return i;
+    }
+    else
+    {
+        return -1;
+    }
+}
+
+// *End* These lines are added for Lab1 Exerise3 
+//******************************************************************************************************************************************//
+
+//******************************************************************************************************************************************//
+// *Begin* These lines are added for Lab1 Exerise4
+
+void MyThreadPrint(int arg){
+
+    Thread *t = (Thread*)arg;
+    printf("name %s, threadID %d, status: %s.\n",t->getName(),t->getThreadID(),t->getStatus());
+}
+
+// *End* These lines are added for Lab1 Exerise4
+//******************************************************************************************************************************************//
