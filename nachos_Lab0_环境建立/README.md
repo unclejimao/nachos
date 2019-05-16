@@ -1,19 +1,56 @@
-# NachOS_4.1 编译过程
-## 编译环境
+# Lab0环境建立 实习说明
+
+本实习要求在Linux或Unix主机上安装并运行Nachos3.4，并对Nachos环境及代码有初步了解。
+
+## 安装Nachos
+选择Linux或Unix系统，安装32位GCC开发环境，参照文档安装Nachos3.4。3.4版本安装过程没什么难点，按部就班安装即可，在此不赘述了。
+
+## 【实习说明】
+### Exercise 1  学习Makefile 
+1. 查阅资料，学习Makefile。
+2. 理解Nachos的Makefile结构，并通过阅读Makefile理解Nachos的代码结构。
+3. 尝试为Nachos添加一个新的源代码文件，并使之编译运行通过。
+
+### Exercise 2  理解Nachos代码框架
+1. 阅读threads/main.cc，了解Nachos的启动过程。
+2. 阅读threads/system.cc(h)，了解Nachos操作系统及虚拟机的组成部分。
+
+### *Challenge 安装Nachos 4.1版本
+1. 本课程要求的nachos 版本是3.4，但是目前nachos的最新版本是4.1，尝试安装并成功运行nachos 4.1。
+2. 在接下来的课程中，将其余lab内容在nachos 4.1上实现。
+
+--------------------------------------------------------
+# 完成情况
+## Exercise1 Makefile学习
+
+请参考该目录下PDF文档[跟我一起写Makefile.pdf](./跟我一起写Makefile.pdf)
+
+## Exercise 2  理解Nachos代码框架
+本Lab需要阅读的代码已经copy至当前目录下，并对代码做了注释，此处代码不能放入NachOS系统下，仅做阅读、修改参考。
+### threads/main.cc
+- 代码解读详情见当前目录下[main.cc](./main.cc)
+
+### threads/system.cc
+- 代码解读详情见当前目录下[system.cc](./system.cc)
+
+--------------------------------------------------------
+
+## *Challenge 安装Nachos 4.1
+### 编译环境
 - VMware® Workstation 15 Pro
 - Ubuntu 18.04.1 LTS 64位
 - g++-4.4
-## 依赖库的安装
+### 依赖库的安装
 在64位系统编译32位程序需要安装一些依赖库文件，可以参考下面的链接进行提前安装，也可以根据错误输出提示安装所需要的库。
 
 > [64位系统下配置32位开发环境](http://sixarm.com/about/ubuntu-apt-get-install-ia32-for-32-bit-on-64-bit.html)
 
 我的库文件提前装好了，因此这里不再赘述。
-## 编译目标
+### 编译目标
 
     ../NachOS-4.1/code/build.linux/Makefile
 
-## debug过程
+### debug过程
 - 进入```NachOS-4.1/code/build.linux```目录，依次执行```make clean```和```make distclean```命令
 
     这两句打扫编译环境，清理之前编译（如果编译过的话）产生的中间文件，每次编译前都最好执行者两个命令。两个命令输出如下：
