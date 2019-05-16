@@ -28,9 +28,21 @@
 ## Exercise 2  理解Nachos代码框架
 本Lab需要阅读的代码已经copy至当前目录下，并对代码做了注释，此处代码不能放入NachOS系统下，仅做阅读、修改参考。
 ### threads/main.cc
+- main()函数是整操作系统内核的入口，它主要干了以下事情：
+  - 调用Initialize()函数初始化NachOS系统各部分所需要的数据结构
+  - 解析命令行参数，执行各参数定义的相关函数
+  - 调用Finish(),杀死main()线程，退出main()函数
+
 - 代码解读详情见当前目录下[main.cc](./main.cc)
 
 ### threads/system.cc
+- system.cc是NachOS初始化和清理的程序，下面声明了NachOS用到的所有全局数据结构和一些重要函数：
+  - TimerInterruptHandler()
+    Timer device 会周期性的终端CPU，然后每次都调用此函数，然后关闭终端。如果直接Yield()会刮起interrupt handler，而不是被中断的线程。因此设置一个flag，使得当完成interrupt handler时，看起来就像是被中断的线程在中断时调用了Yield()一样
+  - Initialize()
+    根据命令行传入的参数初始化所需的全局数据结构
+  - Cleanup()
+    终止NachOS,释放全局数据结构
 - 代码解读详情见当前目录下[system.cc](./system.cc)
 
 --------------------------------------------------------
