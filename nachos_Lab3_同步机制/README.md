@@ -17,3 +17,16 @@
 ### Exercise 4  实现同步互斥实例
 - 基于Nachos中的信号量、锁和条件变量，采用两种方式实现同步和互斥机制应用（其中使用条件变量实现同步互斥机制为必选题目）。
 - 具体可选择“生产者-消费者问题”、“读者-写者问题”、“哲学家就餐问题”、“睡眠理发师问题”等。（也可选择其他经典的同步互斥问题）
+
+# 完成情况
+## Exercise 1  调研
+
+## Exercise 2  源代码阅读
+### code/threads/synch.h
+### code/threads/synch.cc
+### code/threads/synchlist.h
+### code/threads/synchlist.cc
+
+## Exercise 3  实现锁和条件变量
+
+## Exercise 4  实现同步互斥实例
