@@ -30,7 +30,7 @@ Nachos系统的内存分配必须在用户程序载入内存时一次性完成�
 ### 二、分页式内存管理
 目前Nachos系统中，类Class Thread的成员变量AddrSpace* space中使用TranslationEntry* pageTable来管理内存。应用程序的启动过程中，对其进行初始化；而在线程的切换过程中，亦会对该变量进行保存和恢复的操作（使得类Class Machine中定义的Class Machine::TranslationEntry* pageTable始终指向当前正在运行的线程的页表）。
 
-#### Exercise 4 内存全局管理数据结构
+#### Exercise 4  内存全局管理数据结构
 - 设计并实现一个全局性的数据结构（如空闲链表、位图等）来进行内存的分配和回收，并记录当前内存的使用状态。
 #### Exercise 5  多线程支持
 - 目前Nachos系统的内存中同时只能存在一个线程，我们希望打破这种限制，使得Nachos系统支持多个线程同时存在于内存中。
@@ -41,3 +41,19 @@ Nachos系统的内存分配必须在用户程序载入内存时一次性完成�
 
 #### Exercise 7  实现Lazy-loading的内存分配算法
 - 我们已经知道，Nachos系统为用户程序分配内存必须在用户程序载入内存时一次性完成，故此，系统能够运行的用户程序的大小被严格限制在4KB以下。请实现Lazy-loading的内存分配算法，使得当且仅当程序运行过程中缺页中断发生时，才会将所需的页面从磁盘调入内存。
+
+---------------------------------
+# 完成情况
+
+## Exercise 1  源代码阅读
+### code/userprog/progtest.cc
+
+### machine.h(cc)
+### translate.h(cc)
+### exception.h(cc)
+## Exercise 2  TLB MISS异常处理
+## Exercise 3  置换算法
+## Exercise 4  内存全局管理数据结构
+## Exercise 5  多线程支持
+## Exercise 6  缺页中断处理
+## Exercise 7  实现Lazy-loading的内存分配算法
