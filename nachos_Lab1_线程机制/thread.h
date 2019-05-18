@@ -40,9 +40,9 @@
 #include "copyright.h"
 #include "utility.h"
 //******************************************************************************************************************************************//
-// *Begin* These lines are added for Lab1 Exerise3 
+// *Begin* These lines are added for Lab1 Exerise3
 #include "unistd.h"
-// *End* These lines are added for Lab1 Exerise3 
+// *End* These lines are added for Lab1 Exerise3
 //******************************************************************************************************************************************//
 
 #ifdef USER_PROGRAM
@@ -102,13 +102,13 @@ public:
 
   void Fork(VoidFunctionPtr func, void *arg); // Make thread run (*func)(arg)
   void Yield();                               // Relinquish the CPU if any
-      // other thread is runnable
-  void Sleep(); // Put the thread to sleep and
-      // relinquish the processor
-  void Finish(); // The thread is done executing
+                                              // other thread is runnable
+  void Sleep();                               // Put the thread to sleep and
+                                              // relinquish the processor
+  void Finish();                              // The thread is done executing
 
   void CheckOverflow(); // Check if thread has
-      // overflowed its stack
+                        // overflowed its stack
   void setStatus(ThreadStatus st) { status = st; }
   char *getName() { return (name); }
   void Print() { printf("%s, ", name); }
@@ -127,22 +127,24 @@ private:
   // Used internally by Fork()
 
   //******************************************************************************************************************************************//
-  // *Begin* These lines are added for Lab1 Exerise3 
+  // *Begin* These lines are added for Lab1 Exerise3
 
-  private:
-    int userID= getuid();
-    int threadID;
-  public:
-    int getUserID(){
-      return this->userID;
-    }
-    int getThreadID(){
-      return this->threadID;
-    }
+private:
+  int userID = getuid();
+  int threadID;
 
-  // *End* These lines are added for Lab1 Exerise3 
+public:
+  int getUserID()
+  {
+    return this->userID;
+  }
+  int getThreadID()
+  {
+    return this->threadID;
+  }
+
+  // *End* These lines are added for Lab1 Exerise3
   //******************************************************************************************************************************************//
-
 
 #ifdef USER_PROGRAM
   // A thread running a user program actually has *two* sets of CPU registers --
